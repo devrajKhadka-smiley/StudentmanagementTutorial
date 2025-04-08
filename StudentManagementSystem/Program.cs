@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using StudentManagementSystem.Database;
 using StudentManagementSystem.Settings;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,6 +17,11 @@ builder.Services.Configure<AI>(
     builder.Configuration.GetSection("UsedAi")
     );
 
+builder.Services.AddDbContext<StudentDbContext>(
+    (OptionsBuilder) =>
+    {
+        OptionsBuilder.UseNpgsql(builder.Configuration.GetConnectionString("PostgresConnection"));
+    });
 
 var app = builder.Build();
 
