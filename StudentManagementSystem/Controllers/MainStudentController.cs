@@ -2,6 +2,7 @@
 using StudentManagementSystem.Database.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Query.Internal;
+using Microsoft.EntityFrameworkCore;
 
 namespace StudentManagementSystem.Controllers
 {
@@ -57,5 +58,32 @@ namespace StudentManagementSystem.Controllers
             }
             return NotFound("Khai id nai veteyena");
         }
+
+        //[HttpDelete("delete /{id}")]
+        //public IActionResult DeleteStudent(int id) {
+        //    Student? student = dbContext.Students.FirstOrDefault(st => st.Id == id);
+        //    if (student is not null)
+        //    {
+        //        dbContext.Students.Remove(student);
+        //        dbContext.SaveChanges();
+        //        return Ok(student);
+        //    }
+        //    return NotFound("Khai id nai veteyena");
+        //}
+
+        [HttpDelete("delete/{id}")]
+        public IActionResult DeleteStudent(int id)
+        {
+
+            int rowsAffected = dbContext.Students.Where(st => st.Id == id).ExecuteDelete();
+            return Ok(
+                new
+                {
+                    RowsAffected = rowsAffected,
+                    Message = rowsAffected > 0 ? "Student Deleted" : "Student Not Found"
+                }
+                );
+        }
+
     }
 }
